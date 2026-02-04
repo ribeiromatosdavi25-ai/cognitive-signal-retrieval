@@ -7,7 +7,7 @@ cognitive signal strength over pure semantic similarity.
 
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from sentence_transformers import SentenceTransformer
+from simple_embeddings import simple_embed
 from typing import Dict, List, Tuple
 
 
@@ -55,9 +55,8 @@ class CognitiveSignalScorer:
         'VAGUE': 0.2          # Unclear/ambiguous
     }
     
-    def __init__(self, model_name: str = 'all-MiniLM-L6-v2'):
-        """Initialize with sentence transformer model."""
-        self.model = SentenceTransformer(model_name)
+    def __init__(self):
+        """Initialize scorer."""
         self.semantic_weight = 0.4
         self.signal_weight = 0.6
         self.semantic_threshold = 0.3
@@ -110,10 +109,10 @@ class CognitiveSignalScorer:
             Combined score (0.0-1.0+)
         """
         # Semantic similarity
-        fragment_embedding = self.model.encode([fragment['text']])[0]
+        fragment_embedding = simple_embed(fragment['text'])
         
         if query_embedding is None:
-            query_embedding = self.model.encode([query])[0]
+            query_embedding = simple_embed(query)
         
         semantic = cosine_similarity(
             [fragment_embedding], 
@@ -155,7 +154,7 @@ class CognitiveSignalScorer:
             List of (fragment, score) tuples, sorted by score descending
         """
         # Pre-compute query embedding
-        query_embedding = self.model.encode([query])[0]
+        query_embedding = simple_embed(query)
         
         # Score all fragments
         scored = [

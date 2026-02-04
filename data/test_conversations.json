@@ -1,1 +1,124 @@
-
+{
+  "test_cases": [
+    {
+      "name": "Decision Buried in Noise",
+      "description": "High-signal decision buried under semantically similar exploration",
+      "fragments": [
+        {
+          "text": "Maybe we should try Redis for caching?",
+          "type": "EXPLORATION",
+          "stability": "MENTIONED",
+          "operability": "VAGUE"
+        },
+        {
+          "text": "Redis looks pretty fast from the benchmarks",
+          "type": "COMMENT",
+          "stability": "MENTIONED",
+          "operability": "ABSTRACT"
+        },
+        {
+          "text": "Could Redis work for our caching layer?",
+          "type": "QUESTION",
+          "stability": "MENTIONED",
+          "operability": "ABSTRACT"
+        },
+        {
+          "text": "Redis has really good documentation",
+          "type": "COMMENT",
+          "stability": "MENTIONED",
+          "operability": "ABSTRACT"
+        },
+        {
+          "text": "Decision: We're using PostgreSQL for persistence and Redis for caching",
+          "type": "DECISION",
+          "stability": "CONFIRMED",
+          "operability": "CONCRETE"
+        },
+        {
+          "text": "Redis instance deployed to staging environment",
+          "type": "ACTION",
+          "stability": "ACTIVE",
+          "operability": "EXECUTABLE"
+        }
+      ],
+      "query": "What's our caching strategy?",
+      "expected_top_indices": [4, 5]
+    },
+    {
+      "name": "Superseded Information",
+      "description": "Old decision should rank lower than new decision despite semantic similarity",
+      "fragments": [
+        {
+          "text": "We decided to use MongoDB for the database",
+          "type": "DECISION",
+          "stability": "SUPERSEDED",
+          "operability": "CONCRETE"
+        },
+        {
+          "text": "MongoDB is working well so far",
+          "type": "COMMENT",
+          "stability": "SUPERSEDED",
+          "operability": "ABSTRACT"
+        },
+        {
+          "text": "The MongoDB integration is stable",
+          "type": "COMMENT",
+          "stability": "SUPERSEDED",
+          "operability": "ABSTRACT"
+        },
+        {
+          "text": "Decision: Switched from MongoDB to PostgreSQL for better reliability",
+          "type": "DECISION",
+          "stability": "CONFIRMED",
+          "operability": "CONCRETE"
+        },
+        {
+          "text": "PostgreSQL migration completed successfully",
+          "type": "ACTION",
+          "stability": "ACTIVE",
+          "operability": "EXECUTABLE"
+        }
+      ],
+      "query": "What database are we using?",
+      "expected_top_indices": [3, 4]
+    },
+    {
+      "name": "Constraint vs Exploration",
+      "description": "Hard constraint should outrank similar-sounding exploration",
+      "fragments": [
+        {
+          "text": "Maybe we could allow 10MB file uploads",
+          "type": "EXPLORATION",
+          "stability": "MENTIONED",
+          "operability": "VAGUE"
+        },
+        {
+          "text": "10MB seems like a reasonable upload limit",
+          "type": "COMMENT",
+          "stability": "MENTIONED",
+          "operability": "ABSTRACT"
+        },
+        {
+          "text": "Users might want to upload files up to 10MB",
+          "type": "ANALYSIS",
+          "stability": "PROPOSED",
+          "operability": "ABSTRACT"
+        },
+        {
+          "text": "CONSTRAINT: Maximum file upload size is 5MB due to CDN limits",
+          "type": "CONSTRAINT",
+          "stability": "CONFIRMED",
+          "operability": "CONCRETE"
+        },
+        {
+          "text": "Upload size validation set to 5MB in production",
+          "type": "ACTION",
+          "stability": "ACTIVE",
+          "operability": "EXECUTABLE"
+        }
+      ],
+      "query": "What's the maximum file upload size?",
+      "expected_top_indices": [3, 4]
+    }
+  ]
+}
